@@ -4,7 +4,8 @@
 
    "repository": {
     "type": "git",
-    "url": "https://github.com/aparnajyothi-y/Setup-node-test.git"
+    "url": "https://github.com/setup-actions-demo/test-setup-node.git"
+
   },
   "scripts": {
     "build": "vite build",
