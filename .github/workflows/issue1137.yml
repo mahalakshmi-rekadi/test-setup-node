@@ -1,0 +1,27 @@
+name: Release (Private Packages)
+on:
+  workflow_dispatch:
+jobs:
+  version_or_release:
+    name: 'Version and open PR (or) release private packages'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code repository
+        uses: actions/checkout@v4
+        
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 6.14.5  # Specify the pnpm version here
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - name: verify pnpm-lock.yaml presence
+        run: |
+          if [ ! -f pnpm-lock.yaml ]; then
+            echo "Error: pnpm-lock.yaml not found!"
+            exit 1
+          fi
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
