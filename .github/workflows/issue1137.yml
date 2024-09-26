@@ -17,5 +17,14 @@ jobs:
         with:
           node-version: 18
           cache: 'pnpm'
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: setup npmrc file to configure pnpm
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            @mycompany:registry=https://npm.pkg.github.com
+            //npm.pkg.github.com/:_authToken=$NPM_PUBLISH_TOKEN
+            //registry.npmjs.org/:_authToken=null
+          EOF
      
      
