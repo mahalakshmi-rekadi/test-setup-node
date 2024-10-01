@@ -20,10 +20,8 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
           
       - name: install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --store-dir $PNPM_CACHE_FOLDER
 
-      - name: Setup pnpm store config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
       
       
      
