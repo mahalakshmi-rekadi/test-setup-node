@@ -1,0 +1,34 @@
+name: Reproduce Setup Node.js Issue
+
+on:
+  workflow_dispatch:
+
+jobs:
+  reproduce-issue:
+    name: Reproduce Setup Node.js Issue
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project-folder: [project1, project2, project3, project4, project5]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: ${{ matrix.project-folder }}/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ${{ matrix.project-folder }}
+
+      - name: Run yarn cache dir
+        run: yarn cache dir
+        working-directory: ${{ matrix.project-folder }}
+
+      - name: Run build
+        run: yarn build
+        working-directory: ${{ matrix.project-folder }}
