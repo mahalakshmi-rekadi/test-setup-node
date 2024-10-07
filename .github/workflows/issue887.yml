@@ -1,33 +1,42 @@
-name: Reproduce Setup Node.js Issue
-
+name: Reproduce Yarn Cache Issue
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
-
+env:
+  CI: true
 jobs:
-  reproduce-issue:
-    name: Reproduce Setup Node.js Issue
+  reproduce_issue:
+    name: 'Reproduce Yarn Cache Issue'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project-folder: [project1, project2, project3, project4, project5]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'yarn'
-          cache-dependency-path: ${{ matrix.project-folder }}/yarn.lock
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Print Yarn Version
+        run: yarn --version
+
+      - name: Print Node Version
+        run: node --version
+
+      - name: Print Yarn Cache Directory
+        run: yarn cache dir
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: ${{ matrix.project-folder }}
+        run: yarn install
 
-      - name: Run yarn cache dir
+      - name: Print Yarn Cache Directory After Install
         run: yarn cache dir
-        working-directory: ${{ matrix.project-folder }}
 
       - name: Run build
         run: yarn build
