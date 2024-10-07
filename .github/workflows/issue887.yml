@@ -16,12 +16,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Verify yarn.lock file exists
+        run: ls -al && ls -al **/yarn.lock
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache-dependency-path: '**/yarn.lock'
 
       - name: Print Yarn Version
         run: yarn --version
