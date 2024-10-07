@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
           cache: 'yarn'
-          cache-dependency-path: '**/yarn.lock'
+          cache-dependency-path: 'yarn.lock'
 
       - name: Print Yarn Version
         run: yarn --version
@@ -37,7 +37,3 @@ jobs:
 
       - name: Print Yarn Cache Directory After Install
         run: yarn cache dir
-
-      - name: Run build
-        run: yarn build
-        working-directory: ${{ matrix.project-folder }}
