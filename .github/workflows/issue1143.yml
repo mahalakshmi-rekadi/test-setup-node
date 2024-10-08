@@ -4,7 +4,6 @@ on:
 
 jobs:
   reproduce_issue:
-    name: 'Reproduce Yarn Cache Issue'
     runs-on: self-hosted
     steps:
        - name: Checkout code
@@ -26,6 +25,25 @@ jobs:
          run: |
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.HOST_USER }}@${{ secrets.HOST_DEV }} << 'EOF'
           cd /home/app
+          # Debugging: Print PATH and check for Node.js and Yarn
+            echo "Current PATH: $PATH"
+            which node || echo "Node.js not found"
+            which yarn || echo "Yarn not found"
+
+            # Ensure Node.js is installed
+            if ! command -v node &> /dev/null
+            then
+              echo "Node.js not found, installing..."
+              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Ensure Yarn is installed
+            if ! command -v yarn &> /dev/null
+            then
+              echo "Yarn not found, installing..."
+              npm install -g yarn
+            fi
           git checkout dev
           git pull origin dev
           yarn
