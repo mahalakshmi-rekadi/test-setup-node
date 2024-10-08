@@ -1,3 +1,4 @@
+name: Reproduce Yarn Cache Issue
 on:
   push:
     branches:
@@ -8,7 +9,7 @@ env:
 jobs:
   reproduce_issue:
     name: 'Reproduce Yarn Cache Issue'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
      - name: Checkout code
        uses: actions/checkout@v4
