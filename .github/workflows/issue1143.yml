@@ -1,0 +1,12 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+env:
+  CI: true
+jobs:
+  reproduce_issue:
+    name: 'Reproduce Yarn Cache Issue'
+    runs-on: ubuntu-latest
+ 
