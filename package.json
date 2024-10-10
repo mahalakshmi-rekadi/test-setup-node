@@ -1,10 +1,7 @@
 {
   "name": "@setup-actions-demo/test-setup-node",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/setup-actions-demo/test-setup-node.git"
-  },
+  "repository": "git+https://github.com/setup-actions-demo/test-setup-node.git",
   "scripts": {
     "build": "vite build",
     "start": "vite"
@@ -29,7 +26,7 @@
     "encodeurl": "^2.0.0",
     "escape-html": "^1.0.3",
     "etag": "^1.8.1",
-    "express": "^5.0.0",
+    "express": "^4.21.1",
     "finalhandler": "^1.2.0",
     "forwarded": "^0.2.0",
     "fresh": "^0.5.2",
@@ -62,8 +59,7 @@
     "utils-merge": "^1.0.1",
     "vary": "^1.1.2"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "mahalakshmi-rekadi <mahalakshmi-rekadi@github.com>",
+  "license": "ISC",
+  "main": "index.js"
 }
-
-
