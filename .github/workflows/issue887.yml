@@ -1,0 +1,42 @@
+name: Reproduce Yarn Cache Issue
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+env:
+  CI: true
+jobs:
+  reproduce_issue:
+    name: 'Reproduce Yarn Cache Issue'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Verify yarn.lock file exists
+        run: ls -al && ls -al **/yarn.lock
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Print Yarn Version
+        run: yarn --version
+
+      - name: Print Node Version
+        run: node --version
+
+      - name: Print Yarn Cache Directory
+        run: yarn cache dir
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Print Yarn Cache Directory After Install
+        run: yarn cache dir
