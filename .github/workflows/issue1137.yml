@@ -18,34 +18,24 @@ jobs:
     environment: 'Production - Private Packages'
     steps:
       - name: checkout code repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.1.2
-          dest: ~/setup-pnpm
-          package_json_file: package.json
-          standalone: false
+      - uses: pnpm/action-setup@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'pnpm'
-      - name: create pnpm store directory
-        run: mkdir -p $PNPM_CACHE_FOLDER
       - name: setup pnpm store config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
-      - name: verify pnpm store config
-        run: pnpm config get store-dir
       - name: install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: setup npmrc file to configure pnpm
         run: |
           cat << EOF > "$HOME/.npmrc"
             @mycompany:registry=https://npm.pkg.github.com
-            //npm.pkg.github.com/:_authToken=\${{ secrets.NPM_PUBLISH_TOKEN }}
+            //npm.pkg.github.com/:_authToken=$NPM_PUBLISH_TOKEN
             //registry.npmjs.org/:_authToken=null
           EOF
         env:
@@ -62,13 +52,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOME: ${{ github.workspace }}
-     
-
-      
-      
-
-
-      
-      
-     
-     
