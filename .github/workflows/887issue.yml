@@ -1,8 +1,7 @@
 name: CI Build
 on:
-  pull_request:
-  push:
-    branches: [ master, hotfix/* ]
+  workflow_dispatch:
+jobs:
 permissions:
   id-token: write
   checks: write
