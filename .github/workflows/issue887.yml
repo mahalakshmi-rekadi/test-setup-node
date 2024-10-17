@@ -1,6 +1,6 @@
 name: CI Build
 on:
-  workflow_distpatch:
+ workflow_dispatch:
 permissions:
   id-token: write
   checks: write
