@@ -1,42 +1,51 @@
-name: Reproduce Yarn Cache Issue
+name: CI Build
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
-env:
-  CI: true
+  workflow_distpatch:
+permissions:
+  id-token: write
+  checks: write
+  packages: write
+  actions: read
+  contents: write
+  issues: read
+  pull-requests: write
 jobs:
-  reproduce_issue:
-    name: 'Reproduce Yarn Cache Issue'
+  build-webfrontend:
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - name: Checkout code repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-
-      - name: Verify yarn.lock file exists
-        run: ls -al && ls -al **/yarn.lock
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+          node-version: "20"
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
+      - run: 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc'
+      - run: make webfrontend-build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: webfrontend
+          path: service/webfrontend/build/
 
-      - name: Print Yarn Version
-        run: yarn --version
+  test-webfrontend:
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: 'yarn'
+          cache-dependency-path: '**/yarn.lock'
+      - run: 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc'
+      - run: make webfrontend-test
+      - name: Upload Test Results (webfrontend)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: webfrontend-test-results
+          path: "**/webfrontend/junit.xml"
 
-      - name: Print Node Version
-        run: node --version
 
-      - name: Print Yarn Cache Directory
-        run: yarn cache dir
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Print Yarn Cache Directory After Install
-        run: yarn cache dir
