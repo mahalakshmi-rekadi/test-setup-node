@@ -22,6 +22,14 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: '**/yarn.lock'
       - run: 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc'
+      - name: Check Makefile
+        run: |
+          if [ -f Makefile ]; then
+            echo "Makefile exists."
+            make -qp | awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ {split($1,A,/ /); for(i in A)print A[i]}' | sort -u
+          else
+            echo "Makefile does not exist."
+          fi
       - run: make webfrontend-build
       - uses: actions/upload-artifact@v4
         with:
